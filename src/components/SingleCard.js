@@ -15,7 +15,7 @@ function SingleCard({ card, handleChoice, flipped, disabled }) {
         <img
           className="back"
           onClick={handleClick}
-          src="/img/cover.png"
+          src="/img/pokeball.png"
           alt="card back"
         />
       </div>

@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import SingleCard from "./components/SingleCard";
+import WinScreen from "./components/WinScreen";
 
 const cardImages = [
-  { src: "/img/helmet-1.png", matched: false },
-  { src: "/img/potion-1.png", matched: false },
-  { src: "/img/ring-1.png", matched: false },
-  { src: "/img/scroll-1.png", matched: false },
-  { src: "/img/shield-1.png", matched: false },
-  { src: "/img/sword-1.png", matched: false },
+  { src: "/img/charizard.png", matched: false },
+  { src: "/img/dragonite.png", matched: false },
+  { src: "/img/gengar.png", matched: false },
+  { src: "/img/jigglypuff.png", matched: false },
+  { src: "/img/mewtwo.png", matched: false },
+  { src: "/img/pikachu.png", matched: false },
 ];
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [hasWon, setHasWon] = useState(false);
 
   //Shuffle cards
   const shuffleCards = () => {
@@ -76,33 +78,37 @@ function App() {
       const allMatched = cards.every((card) => card.matched);
       if (allMatched) {
         setTimeout(() => {
-          alert("Congratulations, you win!");
-        }, 500);
+          setHasWon(true);
+        }, 700);
       }
     } else {
       setMounted(true);
     }
   }, [cards, mounted]);
 
-  return (
-    <div className="App">
-      <h1>Magic Match</h1>
-      <button onClick={shuffleCards}>New Game</button>
+  if (hasWon) {
+    return <WinScreen shuffleCards={shuffleCards} setHasWon={setHasWon} />;
+  } else {
+    return (
+      <div className="App">
+        <h1>Pokémon Match!</h1>
+        <button onClick={shuffleCards}>New Game</button>
 
-      <div className="card-grid">
-        {cards.map((card) => (
-          <SingleCard
-            key={card.id}
-            card={card}
-            handleChoice={handleChoice}
-            flipped={card === choiceOne || card === choiceTwo || card.matched}
-            disabled={disabled}
-          />
-        ))}
+        <div className="card-grid">
+          {cards.map((card) => (
+            <SingleCard
+              key={card.id}
+              card={card}
+              handleChoice={handleChoice}
+              flipped={card === choiceOne || card === choiceTwo || card.matched}
+              disabled={disabled}
+            />
+          ))}
+        </div>
+        <p>Turns: {turns}</p>
       </div>
-      <p>Turns: {turns}</p>
-    </div>
-  );
+    );
+  }
 }
 
 export default App;
